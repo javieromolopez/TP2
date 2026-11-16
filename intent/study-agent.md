@@ -14,6 +14,9 @@ The same student. Today they make their own flashcards, or ask a chatbot for "pr
 - Objective answers (multiple choice, fill-in, ordering) are graded by code against the stored key. Only free-recall answers are judged by the model, and those scores are labelled model-judged.
 - Total project cost under about $10.
 
+## Shared engine
+The practice session and the post-class review (`intent/post-class-review.md`) run on one session engine: the same item kinds, the same grading (code first, model only for free recall, labelled), the same confidence rating and immediate feedback, the same claim check, and the same export. A post-class review is a session with a fixed recipe and a class date.
+
 ## What it may and may not touch
 - **May:** call the course server's read tools; propose quiz-bank writes and Study Lab exports (both land as pending, see `study-lab-export.md`).
 - **May not:** run anything a person has not approved that writes, sends, or publishes; call any tool not on the server; see the Moodle token.
@@ -30,4 +33,4 @@ Scheduling (spaced repetition lives in Study Lab), a web UI for the agent, voice
 - Session length default: 6 questions? (team)
 - Does the agent run the session itself in the terminal, or only build it and leave practice to Study Lab? Spec assumes both: build, then an optional terminal run. (team)
 
-**Approved by:** <name>, <date>
+**Approved by:** Ralston Raphael, 2026-11-16

@@ -1,33 +1,33 @@
-# Intent: Course server (MCP)
+# Intent: Course server (extends the existing Moodle MCP server)
 
 ## Goal
-An MCP server that lets an agent read one student's Moodle course (upcoming deadlines, the course page, the text of a reading or slide deck) and use a small quiz bank, so practice questions come from the real course material instead of the model's memory.
+Extend Ralston's existing Moodle MCP server (public, MIT: `ralstonraphael/moodle-mcp`) into the TP2 server: keep its read-only Moodle tools, drop the ones that write or expose personal data, and add the tools this project needs (class schedule, a class's material, due reviews, quiz bank, grading, gated writes), so an agent can build practice from the real course material instead of the model's memory.
 
 ## Who it is for
-A student preparing for a quiz, lab, or exam. Today they open Moodle, click through sections, download PDFs, and either reread everything or paste chunks into a chatbot that has no idea what the course actually covered.
+A student preparing for a class, quiz, or exam. Today they click through Moodle sections and PDFs, reread everything, or paste chunks into a chatbot that does not know what the course covered.
 
 ## Constraints
-- Python with the official `mcp` SDK (version 2, `MCPServer`), as the TP2 sheet requires. Runs locally over stdio; no hosting.
-- The Moodle REST client can start from the MIT-licensed `ralstonraphael/moodle-mcp` (its `client.py`), but the server itself is rewritten for SDK v2 and for this task's smaller tool set.
-- Credentials: each student's own Moodle mobile-app token, read from the server's environment (`MOODLE_URL`, `MOODLE_TOKEN`). Never in a result, a log line, or the repository. Moodle file URLs carry the token, so results return ids, never raw file URLs.
-- A fixture course (made from the public CPSC 415 course repository) so tests, CI, the eval, and the committed transcripts never need a token or show anyone's real Moodle data. This repository is public.
+- Python with the official `mcp` SDK. The existing server is Python on the official SDK **version 1** (`FastMCP`, `mcp>=1.2,<2`); the course requires **version 2** (`MCPServer` from `mcp.server`). The port is part of the Week 9 build (see `spec.md`).
+- The code comes from the already public, cleaned copy of the server (no token, no personal identity in it). It is brought in as the first build commit after `plan.md` is approved, so the history keeps intent → spec → plan → code.
+- Credentials: each student's own Moodle mobile-app token, from the server's environment (`MOODLE_URL`, `MOODLE_TOKEN`). Never in a result, a log line, a transcript, or the repository.
+- A fixture course (from the public CPSC 415 course repository) so tests, CI, the eval, and committed transcripts never need a token or show real Moodle data. This repository is public.
 - Every tool validates its arguments in code and returns problems as results.
 
 ## What it may and may not touch
-- **May read:** the courses the token's user is enrolled in: deadlines, course contents, page/file/assignment text.
-- **May write (gated):** the local quiz bank file. A write is recorded as pending; a person approves it.
-- **May not:** submit or edit assignments, read grades, post to forums, send messages, mark notifications, download files to disk outside the repository, or touch any other student's data. None of these are exposed as tools.
+- **May read:** the token owner's enrolled courses: deadlines, course contents, page/file/assignment text, announcements.
+- **May write (gated):** quiz bank entries, a Study Lab pack, a Study Lab class review. Each is recorded as pending; a person approves it.
+- **May not:** submit or edit assignments, read grades, post to forums, send messages or notifications, download files outside the repository, call arbitrary Moodle functions, or touch any other student's data. The existing server's tools that do these are not carried over.
 
 ## Not in scope
-Grades and submissions, forum content, other LMSs, hosting the server remotely, multi-user accounts.
+Grades and submissions, forum content, other LMSs, remote hosting, multi-user accounts.
 
 ## Success looks like
-1. Claude Code, with the server registered in `.mcp.json`, answers "what's due this week in CPSC 415 and what should I read for it?" using only the server's tools, and the transcript shows the calls.
-2. A wrong-type or out-of-range argument comes back as an error result, and a missing course or activity comes back as a normal "not found" result, in no-key tests through an in-memory client.
-3. `grep` over the repository and every transcript finds no token.
+1. Claude Code, with the server registered in `.mcp.json`, answers "what did we cover in CPSC 415 today and what should I review?" using only the server's tools, and the transcript shows the calls.
+2. Wrong-type or out-of-range arguments come back as error results and missing items as normal "not found" results, in no-key tests through an in-memory client.
+3. A search of the repository and every transcript finds no token.
 
 ## Open questions
-- Fixture course: is the public CPSC 415 repository enough material, or do we also want one non-CS course (e.g. a biology unit) so the eval is not all one subject? (team)
-- Quiz bank storage: one JSON file per course under `data/` (gitignored) or SQLite? (team; JSON is the default in the spec)
+- Fixture course: CPSC 415 public material only, or add a second subject so the eval is not all one course? (team)
+- Quiz bank storage: JSON per course under `data/` (spec default) or SQLite? (team)
 
-**Approved by:** <name>, <date>
+**Approved by:** Ralston Raphael, 2026-11-16

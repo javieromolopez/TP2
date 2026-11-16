@@ -1,7 +1,7 @@
 # Intent: Study Lab export (gated side effect)
 
 ## Goal
-Turn a finished practice session into a Study Lab pack (the existing study app's `StudyLab.addPack({...})` format: lessons of multiple-choice, fill-in, ordering, and recall steps, plus review cards) so the student can keep practising it with spaced repetition. Also save good questions to the quiz bank for next time.
+Turn a finished practice session into a Study Lab pack (`StudyLab.addPack({...})`: lessons of multiple-choice, fill-in, ordering, and recall steps, plus review cards), and a post-class review into a Study Lab class module (`StudyLab.addReview({...})` in `reviews/<course>/<YYYY-MM-DD>-<slug>.js`, one file per class, Study Lab's existing convention), so the student keeps practising it with Study Lab's spaced-repetition deck. Also save good questions to the quiz bank for next time.
 
 ## Who it is for
 A student who already uses Study Lab. Today every pack is written by hand from the course pages.
@@ -13,8 +13,8 @@ A student who already uses Study Lab. Today every pack is written by hand from t
 - Publishing the pack to the Study Lab artifact stays a manual step by the student.
 
 ## What it may and may not touch
-- **May write (after approval only):** `exports/` in this repository (gitignored), or the Study Lab `packs/` folder named by `STUDY_LAB_DIR` if set; the quiz bank file under `data/`.
-- **May not:** overwrite an existing pack, publish anything, touch Study Lab engine code.
+- **May write (after approval only):** `exports/` in this repository (gitignored), or the Study Lab `packs/` or `reviews/<course>/` folder under `STUDY_LAB_DIR` if set; the quiz bank file under `data/`.
+- **May not:** overwrite an existing pack or class module, publish anything, touch Study Lab engine code.
 
 ## Not in scope
 Speaking/oral packs, vocab decks, interactive `sim` steps, editing packs after export.
@@ -27,4 +27,4 @@ Speaking/oral packs, vocab decks, interactive `sim` steps, editing packs after e
 ## Open questions
 - Should approving also append the questions to the quiz bank in one step, or keep the two pending requests separate? Spec keeps them separate. (team)
 
-**Approved by:** <name>, <date>
+**Approved by:** Ralston Raphael, 2026-11-16
